@@ -70,7 +70,7 @@ function App() {
                       name="name" 
                       id="name"
                       className="form-control form-control-lg" 
-                      placeholder="John Doe"
+                      placeholder="Your Name"
                       onChange={handleInputChange}
                       value={profileData.name}
                       required 
@@ -86,7 +86,7 @@ function App() {
                       name="role" 
                       id="role"
                       className="form-control form-control-lg" 
-                      placeholder="Software Developer"
+                      placeholder="Your Role or Title"
                       onChange={handleInputChange}
                       value={profileData.role}
                     />
@@ -101,7 +101,7 @@ function App() {
                       name="email" 
                       id="email"
                       className="form-control form-control-lg" 
-                      placeholder="john@example.com"
+                      placeholder="youremail@example.com"
                       onChange={handleInputChange}
                       value={profileData.email}
                     />
