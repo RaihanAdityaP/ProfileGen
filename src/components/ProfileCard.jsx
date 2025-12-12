@@ -1,28 +1,92 @@
 import { useRef } from 'react';
 import html2canvas from 'html2canvas';
+import './ProfileCard.css';
 
 function ProfileCard({ data }) {
   const cardRef = useRef();
 
   const handleDownload = () => {
-    html2canvas(cardRef.current).then((canvas) => {
+    html2canvas(cardRef.current, {
+      scale: 2,
+      backgroundColor: null,
+      logging: false,
+    }).then((canvas) => {
       const link = document.createElement('a');
-      link.download = 'profile-card.png';
-      link.href = canvas.toDataURL();
+      link.download = `profile-card-${data.name.replace(/\s+/g, '-').toLowerCase()}.png`;
+      link.href = canvas.toDataURL('image/png');
       link.click();
     });
   };
 
   return (
-    <div className="mt-5">
-      <div ref={cardRef} className="card" style={{ width: '18rem', borderRadius: '15px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
-        {data.photo && <img src={URL.createObjectURL(data.photo)} className="card-img-top" alt="Profile Photo" style={{ borderRadius: '15px 15px 0 0' }} />}
-        <div className="card-body">
-          <h5 className="card-title">{data.name}</h5>
-          <p className="card-text">{data.bio}</p>
+    <div className="profile-card-container">
+      <div ref={cardRef} className="profile-card">
+        {/* Background Pattern */}
+        <div className="card-background"></div>
+        
+        {/* Card Content */}
+        <div className="card-content">
+          {/* Profile Photo */}
+          <div className="profile-photo-wrapper">
+            {data.photo ? (
+              <img 
+                src={URL.createObjectURL(data.photo)} 
+                className="profile-photo" 
+                alt="Profile" 
+              />
+            ) : (
+              <div className="profile-photo-placeholder">
+                <i className="bi bi-person-circle"></i>
+              </div>
+            )}
+          </div>
+
+          {/* Profile Info */}
+          <div className="profile-info">
+            <h2 className="profile-name">{data.name || 'Your Name'}</h2>
+            {data.role && (
+              <p className="profile-role">
+                <i className="bi bi-briefcase-fill me-2"></i>
+                {data.role}
+              </p>
+            )}
+            {data.bio && (
+              <p className="profile-bio">{data.bio}</p>
+            )}
+          </div>
+
+          {/* Contact Info */}
+          {(data.email || data.phone) && (
+            <div className="contact-info">
+              {data.email && (
+                <div className="contact-item">
+                  <i className="bi bi-envelope-fill"></i>
+                  <span>{data.email}</span>
+                </div>
+              )}
+              {data.phone && (
+                <div className="contact-item">
+                  <i className="bi bi-telephone-fill"></i>
+                  <span>{data.phone}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Decorative Elements */}
+          <div className="card-decoration">
+            <div className="decoration-circle circle-1"></div>
+            <div className="decoration-circle circle-2"></div>
+            <div className="decoration-circle circle-3"></div>
+          </div>
         </div>
       </div>
-      <button onClick={handleDownload} className="btn btn-success mt-3">Download Card</button>
+
+      {/* Download Button */}
+      <button onClick={handleDownload} className="btn btn-download">
+        <i className="bi bi-download me-2"></i>
+        Download Card
+      </button>
     </div>
   );
 }
