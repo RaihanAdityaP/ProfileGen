@@ -1,91 +1,122 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import html2canvas from 'html2canvas';
 import './ProfileCard.css';
 
 function ProfileCard({ data }) {
   const cardRef = useRef();
+  const [isDownloading, setIsDownloading] = useState(false);
 
-  const handleDownload = () => {
-    html2canvas(cardRef.current, {
-      scale: 2,
-      backgroundColor: null,
-      logging: false,
-    }).then((canvas) => {
+  const handleDownload = async () => {
+    setIsDownloading(true);
+    try {
+      const canvas = await html2canvas(cardRef.current, {
+        scale: 3,
+        backgroundColor: null,
+        logging: false,
+        useCORS: true,
+      });
+      
       const link = document.createElement('a');
       link.download = `profile-card-${data.name.replace(/\s+/g, '-').toLowerCase()}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-    });
+    } catch (error) {
+      console.error('Error generating card:', error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
-    <div className="profile-card-container">
-      <div ref={cardRef} className="profile-card">
-        {/* Background Pattern */}
-        <div className="card-background"></div>
+    <div className="card-container">
+      {/* Card Preview */}
+      <div ref={cardRef} className="modern-card">
+        <div className="card-gradient"></div>
+        <div className="card-pattern"></div>
         
-        {/* Card Content */}
-        <div className="card-content">
+        <div className="card-inner">
           {/* Profile Photo */}
-          <div className="profile-photo-wrapper">
+          <div className="photo-wrapper">
             {data.photo ? (
               <img 
                 src={URL.createObjectURL(data.photo)} 
-                className="profile-photo" 
+                className="profile-img" 
                 alt="Profile" 
               />
             ) : (
-              <div className="profile-photo-placeholder">
+              <div className="profile-placeholder">
                 <i className="bi bi-person-circle"></i>
               </div>
             )}
+            <div className="photo-ring"></div>
           </div>
 
-          {/* Profile Info */}
-          <div className="profile-info">
-            <h2 className="profile-name">{data.name || 'Your Name'}</h2>
+          {/* Profile Details */}
+          <div className="card-details">
+            <h2 className="card-name">{data.name || 'Your Name'}</h2>
+            
             {data.role && (
-              <p className="profile-role">
-                <i className="bi bi-briefcase-fill me-2"></i>
-                {data.role}
-              </p>
+              <div className="card-role">
+                <i className="bi bi-briefcase-fill"></i>
+                <span>{data.role}</span>
+              </div>
             )}
+
             {data.bio && (
-              <p className="profile-bio">{data.bio}</p>
+              <p className="card-bio">{data.bio}</p>
+            )}
+
+            {/* Contact Grid */}
+            {(data.email || data.phone) && (
+              <div className="contact-grid">
+                {data.email && (
+                  <div className="contact-box">
+                    <i className="bi bi-envelope-fill"></i>
+                    <div>
+                      <span className="contact-label">Email</span>
+                      <span className="contact-value">{data.email}</span>
+                    </div>
+                  </div>
+                )}
+                {data.phone && (
+                  <div className="contact-box">
+                    <i className="bi bi-telephone-fill"></i>
+                    <div>
+                      <span className="contact-label">Phone</span>
+                      <span className="contact-value">{data.phone}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
+        </div>
 
-          {/* Contact Info */}
-          {(data.email || data.phone) && (
-            <div className="contact-info">
-              {data.email && (
-                <div className="contact-item">
-                  <i className="bi bi-envelope-fill"></i>
-                  <span>{data.email}</span>
-                </div>
-              )}
-              {data.phone && (
-                <div className="contact-item">
-                  <i className="bi bi-telephone-fill"></i>
-                  <span>{data.phone}</span>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Decorative Elements */}
-          <div className="card-decoration">
-            <div className="decoration-circle circle-1"></div>
-            <div className="decoration-circle circle-2"></div>
-            <div className="decoration-circle circle-3"></div>
-          </div>
+        {/* Decorative Elements */}
+        <div className="card-orbs">
+          <div className="orb orb-1"></div>
+          <div className="orb orb-2"></div>
+          <div className="orb orb-3"></div>
         </div>
       </div>
 
       {/* Download Button */}
-      <button onClick={handleDownload} className="btn btn-download">
-        <i className="bi bi-download me-2"></i>
-        Download Card
+      <button 
+        onClick={handleDownload} 
+        className="download-btn"
+        disabled={isDownloading}
+      >
+        {isDownloading ? (
+          <>
+            <span className="spinner"></span>
+            Generating...
+          </>
+        ) : (
+          <>
+            <i className="bi bi-download"></i>
+            Download Card
+          </>
+        )}
       </button>
     </div>
   );
