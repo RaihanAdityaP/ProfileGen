@@ -41,8 +41,7 @@ function App() {
       <section className="main-section">
         <div className="content-wrapper">
           <div className="page-header">
-            <h1>Profile Card Generator</h1>
-            <p>Create professional profile cards instantly</p>
+            <h1>Simple Profile Card Generator</h1>
           </div>
 
           <div className="grid-container">
@@ -198,10 +197,6 @@ function App() {
           </div>
         </div>
       </section>
-
-      <footer className="app-footer">
-        <p>Profile Card Generator</p>
-      </footer>
     </div>
   );
 }
