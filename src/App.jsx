@@ -11,6 +11,10 @@ function App() {
     email: '',
     phone: ''
   });
+  const [cardDimensions, setCardDimensions] = useState({
+    width: 420,
+    height: 500
+  });
   const [showCard, setShowCard] = useState(false);
 
   const handleSubmit = (e) => {
@@ -23,6 +27,28 @@ function App() {
     setProfileData({ ...profileData, [name]: files ? files[0] : value });
   };
 
+  const handleDimensionChange = (e) => {
+    const { name, value } = e.target;
+    // Allow typing any value, don't clamp yet
+    setCardDimensions({ ...cardDimensions, [name]: value });
+  };
+
+  const handleDimensionBlur = (e) => {
+    const { name, value } = e.target;
+    // Clamp value only when user is done typing (onBlur)
+    let numValue = Number(value);
+    
+    // If empty or invalid, set to minimum
+    if (!value || isNaN(numValue)) {
+      numValue = 200;
+    } else {
+      // Clamp between 200 and 800
+      numValue = Math.max(200, Math.min(800, numValue));
+    }
+    
+    setCardDimensions({ ...cardDimensions, [name]: numValue });
+  };
+
   const handleReset = () => {
     setProfileData({ 
       name: '', 
@@ -32,6 +58,7 @@ function App() {
       email: '',
       phone: ''
     });
+    setCardDimensions({ width: 420, height: 500 });
     setShowCard(false);
     document.getElementById('profile-form').reset();
   };
@@ -153,6 +180,43 @@ function App() {
                   <small>Square image recommended, max 5MB</small>
                 </div>
 
+                <div className="dimension-controls">
+                  <label className="dimension-label">
+                    <i className="bi bi-arrows-angle-expand"></i>
+                    Card Dimensions
+                  </label>
+                  <div className="dimension-inputs">
+                    <div className="dimension-input-group">
+                      <label htmlFor="width">Width (px)</label>
+                      <input 
+                        type="number" 
+                        name="width" 
+                        id="width"
+                        min="200"
+                        max="800"
+                        value={cardDimensions.width}
+                        onChange={handleDimensionChange}
+                        onBlur={handleDimensionBlur}
+                      />
+                    </div>
+                    <span className="dimension-separator">×</span>
+                    <div className="dimension-input-group">
+                      <label htmlFor="height">Height (px)</label>
+                      <input 
+                        type="number" 
+                        name="height" 
+                        id="height"
+                        min="200"
+                        max="800"
+                        value={cardDimensions.height}
+                        onChange={handleDimensionChange}
+                        onBlur={handleDimensionBlur}
+                      />
+                    </div>
+                  </div>
+                  <small>Min: 200px, Max: 800px</small>
+                </div>
+
                 <div className="form-actions">
                   <button type="submit" className="btn btn-primary">
                     <i className="bi bi-stars"></i>
@@ -182,7 +246,10 @@ function App() {
 
               <div className="preview-wrapper">
                 {showCard ? (
-                  <ProfileCard data={profileData} />
+                  <ProfileCard 
+                    data={profileData} 
+                    dimensions={cardDimensions}
+                  />
                 ) : (
                   <div className="empty-preview">
                     <div className="empty-icon">

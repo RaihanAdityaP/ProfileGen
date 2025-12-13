@@ -1,10 +1,16 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import html2canvas from 'html2canvas';
 import './ProfileCard.css';
 
-function ProfileCard({ data }) {
+function ProfileCard({ data, dimensions = { width: 420, height: 500 } }) {
   const cardRef = useRef();
   const [isDownloading, setIsDownloading] = useState(false);
+
+  // Calculate scale factor based on card size
+  const scale = useMemo(() => {
+    const baseWidth = 420;
+    return Math.min(dimensions.width / baseWidth, 1.2);
+  }, [dimensions.width]);
 
   const handleDownload = async () => {
     setIsDownloading(true);
@@ -30,7 +36,15 @@ function ProfileCard({ data }) {
   return (
     <div className="card-container">
       {/* Card Preview */}
-      <div ref={cardRef} className="modern-card">
+      <div 
+        ref={cardRef} 
+        className="modern-card"
+        style={{
+          '--card-width': `${dimensions.width}px`,
+          '--card-height': `${dimensions.height}px`,
+          '--scale-factor': scale,
+        }}
+      >
         <div className="card-gradient"></div>
         <div className="card-pattern"></div>
         
@@ -71,8 +85,10 @@ function ProfileCard({ data }) {
               <div className="contact-grid">
                 {data.email && (
                   <div className="contact-box">
-                    <i className="bi bi-envelope-fill"></i>
-                    <div>
+                    <div className="contact-icon">
+                      <i className="bi bi-envelope-fill"></i>
+                    </div>
+                    <div className="contact-info">
                       <span className="contact-label">Email</span>
                       <span className="contact-value">{data.email}</span>
                     </div>
@@ -80,8 +96,10 @@ function ProfileCard({ data }) {
                 )}
                 {data.phone && (
                   <div className="contact-box">
-                    <i className="bi bi-telephone-fill"></i>
-                    <div>
+                    <div className="contact-icon">
+                      <i className="bi bi-telephone-fill"></i>
+                    </div>
+                    <div className="contact-info">
                       <span className="contact-label">Phone</span>
                       <span className="contact-value">{data.phone}</span>
                     </div>
@@ -96,7 +114,6 @@ function ProfileCard({ data }) {
         <div className="card-orbs">
           <div className="orb orb-1"></div>
           <div className="orb orb-2"></div>
-          <div className="orb orb-3"></div>
         </div>
       </div>
 
@@ -104,6 +121,7 @@ function ProfileCard({ data }) {
       <button 
         onClick={handleDownload} 
         className="download-btn"
+        style={{ maxWidth: `${dimensions.width}px` }}
         disabled={isDownloading}
       >
         {isDownloading ? (
