@@ -38,36 +38,20 @@ function App() {
 
   return (
     <div className="app-wrapper">
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-badge">
-            <i className="bi bi-stars"></i>
-            <span>Free Tool</span>
-          </div>
-          <h1 className="hero-title">
-            Create Stunning
-            <span className="gradient-text"> Profile Cards</span>
-          </h1>
-          <p className="hero-subtitle">
-            Design beautiful, professional profile cards in seconds. 
-            Perfect for social media, portfolios, and business cards.
-          </p>
-        </div>
-      </section>
-
-      {/* Main Content */}
       <section className="main-section">
         <div className="content-wrapper">
+          <div className="page-header">
+            <h1>Profile Card Generator</h1>
+            <p>Create professional profile cards instantly</p>
+          </div>
+
           <div className="grid-container">
-            {/* Form Section */}
             <div className="form-section">
               <div className="section-header">
                 <h2>
                   <i className="bi bi-pencil-square"></i>
                   Your Information
                 </h2>
-                <p>Fill in your details to generate your card</p>
               </div>
 
               <form onSubmit={handleSubmit} id="profile-form" className="profile-form">
@@ -167,7 +151,7 @@ function App() {
                       <span>{profileData.photo ? profileData.photo.name : 'Choose a photo'}</span>
                     </label>
                   </div>
-                  <small>Recommended: Square image, max 5MB</small>
+                  <small>Square image recommended, max 5MB</small>
                 </div>
 
                 <div className="form-actions">
@@ -189,14 +173,12 @@ function App() {
               </form>
             </div>
 
-            {/* Preview Section */}
             <div className="preview-section">
               <div className="section-header">
                 <h2>
                   <i className="bi bi-eye"></i>
                   Live Preview
                 </h2>
-                <p>See your card in real-time</p>
               </div>
 
               <div className="preview-wrapper">
@@ -208,7 +190,7 @@ function App() {
                       <i className="bi bi-card-image"></i>
                     </div>
                     <h3>No Preview Yet</h3>
-                    <p>Fill out the form and click "Generate Card" to see your profile card here</p>
+                    <p>Fill the form and generate your card</p>
                   </div>
                 )}
               </div>
@@ -217,22 +199,8 @@ function App() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="app-footer">
-        <div className="footer-content">
-          <p>
-            Made with <i className="bi bi-heart-fill"></i> by 
-            <a href="https://github.com/RaihanAdityaP" target="_blank" rel="noopener noreferrer">
-              RaihanAdityaP
-            </a>
-          </p>
-          <div className="footer-links">
-            <a href="https://github.com/RaihanAdityaP/ProfileGen" target="_blank" rel="noopener noreferrer">
-              <i className="bi bi-github"></i>
-              GitHub
-            </a>
-          </div>
-        </div>
+        <p>Profile Card Generator</p>
       </footer>
     </div>
   );
