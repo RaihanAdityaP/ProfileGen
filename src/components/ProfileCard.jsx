@@ -85,10 +85,8 @@ function ProfileCard({ data, dimensions = { width: 420, height: 500 } }) {
               <div className="contact-grid">
                 {data.email && (
                   <div className="contact-box">
-                    <div className="contact-icon">
-                      <i className="bi bi-envelope-fill"></i>
-                    </div>
-                    <div className="contact-info">
+                    <i className="bi bi-envelope-fill"></i>
+                    <div>
                       <span className="contact-label">Email</span>
                       <span className="contact-value">{data.email}</span>
                     </div>
@@ -96,10 +94,8 @@ function ProfileCard({ data, dimensions = { width: 420, height: 500 } }) {
                 )}
                 {data.phone && (
                   <div className="contact-box">
-                    <div className="contact-icon">
-                      <i className="bi bi-telephone-fill"></i>
-                    </div>
-                    <div className="contact-info">
+                    <i className="bi bi-telephone-fill"></i>
+                    <div>
                       <span className="contact-label">Phone</span>
                       <span className="contact-value">{data.phone}</span>
                     </div>
